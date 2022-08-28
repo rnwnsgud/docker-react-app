@@ -1,0 +1,22 @@
+version: "3"
+services:
+  react:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /usr/src/app/node_modules # 참조하지 않겠다
+      - ./:/usr/src/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true # 중요!! 리액트 핫 리로딩 적용. 윈도우 터미널에서만 필요함.
+    stdin_open: true # 리액트에 한정된 명령어. 리액트 앱 끌 때 필요.
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /usr/src/app/node_modules
+      - ./:/usr/src/app
+    command: ["npm", "run", "test"]
